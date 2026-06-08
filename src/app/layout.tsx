@@ -32,7 +32,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-white text-zinc-950">
         <Providers>
           <header className="border-b px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="font-bold text-xl tracking-tight">LearnerPro</Link>
+            <Link href="/" className="font-bold text-xl tracking-tight">Quaestor</Link>
             <nav className="space-x-6 text-sm font-medium text-zinc-600">
               <Link href="/courses" className="hover:text-zinc-900 transition-colors">Courses</Link>
               <Link href="/outcomes" className="hover:text-zinc-900 transition-colors">Outcomes</Link>
