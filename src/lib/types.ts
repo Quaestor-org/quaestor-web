@@ -28,6 +28,7 @@ export type UserOutcome = {
   id: string;
   userId: string;
   lessonId: string;
+  lessonTitle: string;
   score: number;
   totalQuestions: number;
   aiSummary: string | null;
