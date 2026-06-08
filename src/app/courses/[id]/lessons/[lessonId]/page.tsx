@@ -3,22 +3,17 @@ import HeaderFallback from "@/components/fallbacks/header-fallback";
 import LessonMaterialFallback from "@/components/fallbacks/lesson-material-fallback";
 import QuizFormFallback from "@/components/fallbacks/quiz-form-fallback";
 import Header from "@/components/header";
-import { QuizForm } from "@/components/QuizForm";
 import LessonMaterial from "@/components/lesson-material";
+import { QuizForm } from "@/components/QuizForm";
 import { fetchLessonData } from "@/lib/dal";
 import type { Answer, ClientQuestion, Question } from "@/lib/types";
 
-export default async function LessonPage(
+export default function LessonPage(
   props: PageProps<"/courses/[id]/lessons/[lessonId]">,
 ) {
-  function parseParams(p: string | string[] | undefined): string {
-    return Array.isArray(p) ? p[0] : (p ?? "");
-  }
-  const idPromise = props.params.then((p) => parseParams(p.id));
-  const lessonIdPromise = props.params.then((p) => parseParams(p.lessonId));
-  const dataPromise = props.params.then((p) =>
-    fetchLessonData(parseParams(p.lessonId)),
-  );
+  const idPromise = props.params.then((p) => p.id);
+  const lessonIdPromise = props.params.then((p) => p.lessonId);
+  const dataPromise = props.params.then((p) => fetchLessonData(p.lessonId));
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 max-w-3xl mx-auto">
