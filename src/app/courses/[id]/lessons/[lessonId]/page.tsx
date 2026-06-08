@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import HeaderLessonFallback from "@/components/fallbacks/lesson-header-fallback";
+import HeaderFallback from "@/components/fallbacks/header-fallback";
 import LessonMaterialFallback from "@/components/fallbacks/lesson-material-fallback";
 import QuizFormFallback from "@/components/fallbacks/quiz-form-fallback";
 import Header from "@/components/header";
@@ -22,7 +22,7 @@ export default async function LessonPage(
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 max-w-3xl mx-auto">
-      <Suspense fallback={<HeaderLessonFallback />}>
+      <Suspense fallback={<HeaderFallback />}>
         <Header
           idPromise={idPromise}
           titlePromise={dataPromise.then((data) =>
