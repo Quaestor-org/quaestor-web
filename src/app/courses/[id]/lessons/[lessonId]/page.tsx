@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import HeaderLessonFallback from "@/components/fallbacks/lesson-header-fallback";
-import HeaderLesson from "@/components/header-lesson";
-import { QuizForm } from "@/components/QuizForm";
-import LessonMaterial from "@/components/ui/lesson-material";
 import LessonMaterialFallback from "@/components/fallbacks/lesson-material-fallback";
 import QuizFormFallback from "@/components/fallbacks/quiz-form-fallback";
+import Header from "@/components/header";
+import { QuizForm } from "@/components/QuizForm";
+import LessonMaterial from "@/components/lesson-material";
 import { fetchLessonData } from "@/lib/dal";
 import type { Answer, ClientQuestion, Question } from "@/lib/types";
 
@@ -23,11 +23,12 @@ export default async function LessonPage(
   return (
     <div className="space-y-10 animate-in fade-in duration-500 max-w-3xl mx-auto">
       <Suspense fallback={<HeaderLessonFallback />}>
-        <HeaderLesson
+        <Header
           idPromise={idPromise}
-          lessonTitlePromise={dataPromise.then((data) =>
+          titlePromise={dataPromise.then((data) =>
             data && "lesson" in data ? data.lesson?.title : undefined,
           )}
+          path={"courses"}
         />
       </Suspense>
 
