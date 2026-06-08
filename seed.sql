@@ -111,3 +111,82 @@ INSERT INTO answers (id, question_id, text, is_correct) VALUES
 -- q_css_2
 ('a_c2_1', 'q_css_2', 'A JavaScript framework', FALSE),
 ('a_c2_2', 'q_css_2', 'A utility-first CSS framework', TRUE);
+
+-- Additional Questions for remaining lessons
+INSERT INTO questions (id, lesson_id, text) VALUES
+('q_react_4', 'l1_4', 'How do you pass an event handler in React?'),
+('q_react_5', 'l1_5', 'Which operator is commonly used for conditional rendering?'),
+
+('q_next_3', 'l2_3', 'What is a Server Action?'),
+('q_next_4', 'l2_4', 'How does Next.js extend the native fetch API?'),
+('q_next_5', 'l2_5', 'What causes a route to opt into dynamic rendering?'),
+
+('q_py_3', 'l3_1', 'What makes Python great for data science?'),
+('q_py_4', 'l3_2', 'What is a Pandas Series?'),
+('q_py_5', 'l3_4', 'What is Matplotlib primarily used for?'),
+
+('q_dev_3', 'l4_1', 'What is the main goal of DevOps?'),
+('q_dev_4', 'l4_2', 'Which tool is the industry standard for version control?'),
+('q_dev_5', 'l4_5', 'What does IaC stand for?'),
+
+('q_css_3', 'l5_1', 'Which of these is part of the CSS Box Model?'),
+('q_css_4', 'l5_3', 'What is the main difference between Flexbox and Grid?'),
+('q_css_5', 'l5_5', 'How do you apply styles based on viewport size?');
+
+-- Additional Answers
+INSERT INTO answers (id, question_id, text, is_correct) VALUES
+-- q_react_4
+('a_r4_1', 'q_react_4', 'As a string', FALSE),
+('a_r4_2', 'q_react_4', 'As a function reference', TRUE),
+
+-- q_react_5
+('a_r5_1', 'q_react_5', 'The ternary operator', TRUE),
+('a_r5_2', 'q_react_5', 'The exponential operator', FALSE),
+
+-- q_next_3
+('a_n3_1', 'q_next_3', 'An async function executed on the server', TRUE),
+('a_n3_2', 'q_next_3', 'A Redux action payload', FALSE),
+
+-- q_next_4
+('a_n4_1', 'q_next_4', 'By removing caching altogether', FALSE),
+('a_n4_2', 'q_next_4', 'By allowing caching and revalidating configuration', TRUE),
+
+-- q_next_5
+('a_n5_1', 'q_next_5', 'Using static CSS', FALSE),
+('a_n5_2', 'q_next_5', 'Using dynamic functions like cookies()', TRUE),
+
+-- q_py_3
+('a_p3_1', 'q_py_3', 'It compiles to machine code instantly', FALSE),
+('a_p3_2', 'q_py_3', 'Its massive ecosystem of libraries', TRUE),
+
+-- q_py_4
+('a_p4_1', 'q_py_4', 'A 1-dimensional labeled array', TRUE),
+('a_p4_2', 'q_py_4', 'A database schema', FALSE),
+
+-- q_py_5
+('a_p5_1', 'q_py_5', 'Building web servers', FALSE),
+('a_p5_2', 'q_py_5', 'Creating data visualizations', TRUE),
+
+-- q_dev_3
+('a_d3_1', 'q_dev_3', 'To separate developers from operations completely', FALSE),
+('a_d3_2', 'q_dev_3', 'To shorten the development life cycle', TRUE),
+
+-- q_dev_4
+('a_d4_1', 'q_dev_4', 'SVN', FALSE),
+('a_d4_2', 'q_dev_4', 'Git', TRUE),
+
+-- q_dev_5
+('a_d5_1', 'q_dev_5', 'Infrastructure as Code', TRUE),
+('a_d5_2', 'q_dev_5', 'Integration and Containers', FALSE),
+
+-- q_css_3
+('a_c3_1', 'q_css_3', 'Padding', TRUE),
+('a_c3_2', 'q_css_3', 'Color', FALSE),
+
+-- q_css_4
+('a_c4_1', 'q_css_4', 'Flexbox is 1-dimensional, Grid is 2-dimensional', TRUE),
+('a_c4_2', 'q_css_4', 'Grid is only for mobile', FALSE),
+
+-- q_css_5
+('a_c5_1', 'q_css_5', 'Media queries', TRUE),
+('a_c5_2', 'q_css_5', 'Font weights', FALSE);
