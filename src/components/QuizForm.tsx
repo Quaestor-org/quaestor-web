@@ -13,12 +13,15 @@ import type { ClientQuestion } from "@/lib/types";
 
 export function QuizForm({
   lessonIdPromise,
+  lessonTitlePromise,
   questionsPromise,
 }: {
   lessonIdPromise: Promise<string>;
+  lessonTitlePromise: Promise<string | undefined>;
   questionsPromise: Promise<ClientQuestion[] | undefined>;
 }) {
   const lessonId = use(lessonIdPromise);
+  const lessonTitle = use(lessonTitlePromise);
   const questions = use(questionsPromise);
   const qs = questions ?? [];
   const router = useRouter();
@@ -33,13 +36,20 @@ export function QuizForm({
 
   const form = useForm({
     defaultValues: {
-      answers: qs.reduce((acc, q) => {
-        acc[q.id] = "";
-        return acc;
-      }, {} as Record<string, string>),
+      answers: qs.reduce(
+        (acc, q) => {
+          acc[q.id] = "";
+          return acc;
+        },
+        {} as Record<string, string>,
+      ),
     },
     onSubmit: async ({ value }) => {
-      mutation.mutate({ lessonId, answers: value.answers });
+      mutation.mutate({
+        lessonId,
+        lessonTitle: lessonTitle || "",
+        answers: value.answers,
+      });
     },
   });
 
