@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import * as db from "./db";
 
 export async function fetchCourses(query?: string) {
@@ -26,6 +27,7 @@ export async function fetchLessonData(lessonId: string) {
 }
 
 export async function fetchOutcomes() {
+  await connection();
   const outcomes = await db.getOutcomes();
   return Promise.all(
     outcomes.map(async (o) => {
