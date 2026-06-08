@@ -1,7 +1,6 @@
 import { Suspense } from "react";
-import OutcomesDisplay from "@/components/outcomes-display";
 import OutcomesDisplayFallback from "@/components/fallbacks/outcomes-display-fallback";
-import { fetchOutcomes } from "@/lib/dal";
+import OutcomesDisplay from "@/components/outcomes-display";
 
 export default async function OutcomesPage() {
   return (
@@ -10,7 +9,7 @@ export default async function OutcomesPage() {
         Your Learning Outcomes
       </h1>
       <Suspense fallback={<OutcomesDisplayFallback />}>
-        <OutcomesDisplay outcomesPromise={fetchOutcomes()} />
+        <OutcomesDisplay />
       </Suspense>
     </div>
   );
