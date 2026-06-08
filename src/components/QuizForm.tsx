@@ -9,13 +9,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 
-type Question = {
-  id: string;
-  text: string;
-  answers: { id: string; text: string }[];
-};
+import type { ClientQuestion } from '@/lib/types';
 
-export function QuizForm({ lessonId, questions }: { lessonId: string; questions: Question[] }) {
+export function QuizForm({ lessonId, questions }: { lessonId: string; questions: ClientQuestion[] }) {
   const router = useRouter();
 
   const mutation = useMutation({
