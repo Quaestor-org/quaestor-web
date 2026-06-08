@@ -1,43 +1,65 @@
-import { fetchLessonData } from '@/lib/dal';
-import { notFound } from 'next/navigation';
-import { QuizForm } from '@/components/QuizForm';
-import Link from 'next/link';
+import { Suspense } from "react";
+import HeaderLessonFallback from "@/components/fallbacks/lesson-header-fallback";
+import HeaderLesson from "@/components/header-lesson";
+import { QuizForm } from "@/components/QuizForm";
+import LessonMaterial from "@/components/ui/lesson-material";
+import LessonMaterialFallback from "@/components/fallbacks/lesson-material-fallback";
+import QuizFormFallback from "@/components/fallbacks/quiz-form-fallback";
+import { fetchLessonData } from "@/lib/dal";
+import type { Answer, ClientQuestion, Question } from "@/lib/types";
 
-export default async function LessonPage({ params }: { params: Promise<{ id: string, lessonId: string }> }) {
-  const resolvedParams = await params;
-  const { lesson, questions } = await fetchLessonData(resolvedParams.lessonId);
-
-  if (!lesson) {
-    notFound();
+export default async function LessonPage(
+  props: PageProps<"/courses/[id]/lessons/[lessonId]">,
+) {
+  function parseParams(p: string | string[] | undefined): string {
+    return Array.isArray(p) ? p[0] : (p ?? "");
   }
-
-  // Sanitize questions for the client (do not send isCorrect)
-  const safeQuestions = questions.map(q => ({
-    id: q.id,
-    text: q.text,
-    answers: q.answers.map(a => ({ id: a.id, text: a.text }))
-  }));
+  const idPromise = props.params.then((p) => parseParams(p.id));
+  const lessonIdPromise = props.params.then((p) => parseParams(p.lessonId));
+  const dataPromise = props.params.then((p) =>
+    fetchLessonData(parseParams(p.lessonId)),
+  );
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 max-w-3xl mx-auto">
-      <div>
-        <Link href={`/courses/${resolvedParams.id}`} className="text-sm text-blue-600 hover:underline mb-4 inline-block">
-          &larr; Back to Course
-        </Link>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900">{lesson.title}</h1>
-      </div>
+      <Suspense fallback={<HeaderLessonFallback />}>
+        <HeaderLesson
+          idPromise={idPromise}
+          lessonTitlePromise={dataPromise.then((data) =>
+            data && "lesson" in data ? data.lesson?.title : undefined,
+          )}
+        />
+      </Suspense>
 
-      <div className="prose prose-zinc max-w-none text-lg">
-        {lesson.material?.map((paragraph, idx) => (
-          <p key={idx} className="mb-4 text-zinc-700 leading-relaxed">
-            {paragraph}
-          </p>
-        ))}
-      </div>
+      <Suspense fallback={<LessonMaterialFallback />}>
+        <LessonMaterial
+          materialPromise={dataPromise.then((data) =>
+            data && "lesson" in data ? data.lesson?.material : undefined,
+          )}
+        />
+      </Suspense>
 
       <div className="pt-8 border-t border-zinc-200 mt-10">
-        <h2 className="text-2xl font-semibold mb-6 text-zinc-900">Knowledge Check</h2>
-        <QuizForm lessonId={lesson.id} questions={safeQuestions} />
+        <h2 className="text-2xl font-semibold mb-6 text-zinc-900">
+          Knowledge Check
+        </h2>
+        <Suspense fallback={<QuizFormFallback />}>
+          <QuizForm
+            lessonIdPromise={lessonIdPromise}
+            questionsPromise={dataPromise.then((data) =>
+              data && "questions" in data
+                ? (data.questions?.map((q: Question) => ({
+                    id: q.id,
+                    text: q.text,
+                    answers: q.answers.map((a: Answer) => ({
+                      id: a.id,
+                      text: a.text,
+                    })),
+                  })) as ClientQuestion[])
+                : undefined,
+            )}
+          />
+        </Suspense>
       </div>
     </div>
   );
