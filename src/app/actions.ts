@@ -3,7 +3,7 @@
 import { createOutcome, fetchLessonData } from '@/lib/dal';
 import { updateOutcomeSummary } from '@/lib/db';
 
-export async function submitQuizAction(data: { lessonId: string, answers: Record<string, string> }) {
+export async function submitQuizAction(data: { lessonId: string, lessonTitle:string, answers: Record<string, string> }) {
   const { lesson, questions } = await fetchLessonData(data.lessonId);
   if (!lesson) {
     throw new Error('Lesson not found');
@@ -20,6 +20,7 @@ export async function submitQuizAction(data: { lessonId: string, answers: Record
 
   const outcome = await createOutcome({
     lessonId: data.lessonId,
+    lessonTitle:data.lessonTitle,
     score,
     totalQuestions: questions.length,
   });

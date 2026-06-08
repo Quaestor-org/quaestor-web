@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LearnerPro / Quaestor Web 🎓
 
-## Getting Started
+A modern, high-performance learning management platform built with the latest React 19 and Next.js 16 capabilities. Designed for a blazing-fast user experience with streaming, granular suspense, and beautiful UI fallbacks.
 
-First, run the development server:
+## 🚀 Features
+
+- **Modern Architecture**: Built on Next.js 16 App Router using React 19's `use()` hook for granular data streaming and promise resolution.
+- **Granular Suspense**: Elegant loading states utilizing isolated component boundaries with animated skeleton fallbacks, ensuring users never see a jarring blocked UI.
+- **Robust Data Fetching**: Powered by `@tanstack/react-query` for reliable client-side caching and `@tanstack/react-form` for fully typed form handling.
+- **Polished UI/UX**: Constructed with [shadcn/ui](https://ui.shadcn.com/) and Tailwind CSS, providing an accessible, clean, and professional aesthetic right out of the box.
+- **Server Actions**: Secure mutation logic managed via Next.js Server Actions, keeping sensitive execution logic strictly on the backend.
+- **AI-Ready Outcomes**: An outcomes tracking system designed to integrate dynamically updated AI-generated summaries via auto-polling.
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/)
+- **Package Manager**: [Bun](https://bun.sh/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **State/Mutations**: [TanStack Query & Form](https://tanstack.com/)
+
+## 📦 Getting Started
+
+### Prerequisites
+
+Ensure you have [Bun](https://bun.sh/) installed on your machine.
+
+### Installation
+
+1. Clone the repository
+2. Install the dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Running the Development Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start the local development environment:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) with your browser to explore the platform.
 
-To learn more about Next.js, take a look at the following resources:
+### Building for Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To create an optimized production build:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+bun run build
+bun run start
+```
 
-## Deploy on Vercel
+## 🏗 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/app/` - The Next.js App Router containing pages for Courses, Lessons, and Outcomes.
+- `src/components/` - Highly reusable UI components.
+- `src/components/fallbacks/` - Granular Skeleton loaders to handle React Suspense boundaries seamlessly.
+- `src/lib/` - Shared utilities, types, and the Data Access Layer (DAL).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+This software is provided under a Custom License Agreement. 
+
+It is free to use, modify, and distribute for **educational, non-commercial purposes**. 
+
+Patrick MacDonald and the GitHub organization `Quaestor-org` retain unrestricted rights to use this software for any purpose, including commercial ventures. Any commercial use by individuals or entities outside of Patrick MacDonald and `Quaestor-org` requires a separate commercial license. 
+
+Please see the [LICENSE.md](./LICENSE.md) file for full details.

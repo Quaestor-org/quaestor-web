@@ -42,6 +42,7 @@ export default function LessonPage(
         <Suspense fallback={<QuizFormFallback />}>
           <QuizForm
             lessonIdPromise={lessonIdPromise}
+            lessonTitlePromise={dataPromise.then((data) => data.lesson?.title)}
             questionsPromise={dataPromise.then((data) =>
               data && "questions" in data
                 ? (data.questions?.map((q: Question) => ({
