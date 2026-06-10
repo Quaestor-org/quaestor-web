@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { AddQuestionDialog } from "@/components/admin/AddQuestionDialog";
 import { DeleteQuestionButton } from "@/components/admin/DeleteQuestionButton";
+import LessonTitleQuestionPage from "@/components/admin/lesson-title-question-page";
+import SimpleLink from "@/components/link";
 import { fetchLessonData } from "@/lib/dal";
 
 export default function AdminQuestionsPage(
@@ -11,19 +14,26 @@ export default function AdminQuestionsPage(
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <Link
-          href={`/admin/courses/${params.id}/lessons`}
-          className="text-sm text-zinc-500 hover:text-zinc-900 mb-4 inline-block"
-        >
-          &larr; Back to Lessons
-        </Link>
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-            {lesson.title} - Questions
-          </h1>
-          <AddQuestionDialog
-            lessonIdPromise={dataPromise.then((data) => data.lesson?.id)}
+        <Suspense>
+          <SimpleLink
+            pathPromise={props.params.then((p) => `/admin/courses/${p.id}/lessons`)}
+            text={"&larr; Back to Lessons"}
           />
+        </Suspense>
+       
+        <div className="flex items-center justify-between">
+          <Suspense>
+            <LessonTitleQuestionPage
+              lessonTitlePromise={dataPromise.then(
+                (data) => data.lesson?.title,
+              )}
+            />
+          </Suspense>
+          <Suspense>
+            <AddQuestionDialog
+              lessonIdPromise={dataPromise.then((data) => data.lesson?.id)}
+            />
+          </Suspense>
         </div>
       </div>
 
