@@ -1,33 +1,29 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { AddQuestionDialog } from "@/components/admin/AddQuestionDialog";
 import { DeleteQuestionButton } from "@/components/admin/DeleteQuestionButton";
 import { fetchLessonData } from "@/lib/dal";
 
-export default async function AdminLessonPage(props: {
-  params: Promise<{ id: string; lessonId: string }>;
-}) {
-  const params = await props.params;
-  const { lesson, questions } = await fetchLessonData(params.lessonId);
-
-  if (!lesson) {
-    notFound();
-  }
+export default function AdminQuestionsPage(
+  props: PageProps<"/admin/courses/[id]/lessons/[lessonId]">,
+) {
+  const dataPromise = props.params.then((p) => fetchLessonData(p.lessonId));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
         <Link
-          href={`/admin/courses/${params.id}`}
+          href={`/admin/courses/${params.id}/lessons`}
           className="text-sm text-zinc-500 hover:text-zinc-900 mb-4 inline-block"
         >
-          &larr; Back to Course
+          &larr; Back to Lessons
         </Link>
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
             {lesson.title} - Questions
           </h1>
-          <AddQuestionDialog lessonId={lesson.id} />
+          <AddQuestionDialog
+            lessonIdPromise={dataPromise.then((data) => data.lesson?.id)}
+          />
         </div>
       </div>
 

@@ -19,6 +19,12 @@ export function NavBar() {
         >
           Outcomes
         </Link>
+        <Link
+          href="/admin"
+          className="hover:text-zinc-900 transition-colors font-semibold"
+        >
+          Admin
+        </Link>
         <Show when="signed-out">
           <SignInButton mode="modal">
             <button

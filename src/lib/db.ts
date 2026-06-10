@@ -56,9 +56,10 @@ export async function getQuestionsByLesson(
   })) as Question[];
 }
 
-export async function getOutcomes(): Promise<UserOutcome[]> {
+export async function getOutcomes(userId: string): Promise<UserOutcome[]> {
   const { rows } = await pool.query(
-    'SELECT id, user_id as "userId", lesson_id as "lessonId", score, total_questions as "totalQuestions", ai_summary as "aiSummary", created_at as "createdAt" FROM user_outcomes ORDER BY created_at DESC',
+    'SELECT id, user_id as "userId", lesson_id as "lessonId", score, total_questions as "totalQuestions", ai_summary as "aiSummary", created_at as "createdAt" FROM user_outcomes WHERE user_id = $1 ORDER BY created_at DESC',
+    [userId]
   );
   return rows.map((r) => ({
     ...r,

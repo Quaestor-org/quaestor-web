@@ -1,10 +1,12 @@
-import { fetchCourseData } from "@/lib/dal";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddLessonDialog } from "@/components/admin/AddLessonDialog";
 import { DeleteLessonButton } from "@/components/admin/DeleteLessonButton";
+import { fetchCourseData } from "@/lib/dal";
 
-export default async function AdminCoursePage(props: { params: Promise<{ id: string }> }) {
+export default async function AdminLessonPage(props: {
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
   const { course, lessons } = await fetchCourseData(params.id);
 
@@ -15,7 +17,12 @@ export default async function AdminCoursePage(props: { params: Promise<{ id: str
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
-        <Link href="/admin" className="text-sm text-zinc-500 hover:text-zinc-900 mb-4 inline-block">&larr; Back to Dashboard</Link>
+        <Link
+          href="/admin"
+          className="text-sm text-zinc-500 hover:text-zinc-900 mb-4 inline-block"
+        >
+          &larr; Back to Dashboard
+        </Link>
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
             {course.title}
@@ -36,10 +43,18 @@ export default async function AdminCoursePage(props: { params: Promise<{ id: str
             </thead>
             <tbody>
               {lessons.map((lesson) => (
-                <tr key={lesson.id} className="border-b last:border-0 hover:bg-zinc-50">
-                  <td className="px-6 py-4 font-medium text-zinc-900">{lesson.title}</td>
+                <tr
+                  key={lesson.id}
+                  className="border-b last:border-0 hover:bg-zinc-50"
+                >
+                  <td className="px-6 py-4 font-medium text-zinc-900">
+                    {lesson.title}
+                  </td>
                   <td className="px-6 py-4 text-right space-x-4">
-                    <Link href={`/admin/courses/${course.id}/lessons/${lesson.id}`} className="text-blue-600 hover:underline font-medium">
+                    <Link
+                      href={`/admin/courses/${course.id}/lessons/${lesson.id}`}
+                      className="text-blue-600 hover:underline font-medium"
+                    >
                       Manage Questions
                     </Link>
                     <DeleteLessonButton id={lesson.id} courseId={course.id} />
@@ -48,7 +63,10 @@ export default async function AdminCoursePage(props: { params: Promise<{ id: str
               ))}
               {lessons.length === 0 && (
                 <tr>
-                  <td colSpan={2} className="px-6 py-8 text-center text-zinc-500">
+                  <td
+                    colSpan={2}
+                    className="px-6 py-8 text-center text-zinc-500"
+                  >
                     No lessons found in this course. Create one to get started.
                   </td>
                 </tr>

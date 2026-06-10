@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { connection } from "next/server";
 import * as db from "./db";
 
@@ -27,8 +28,11 @@ export async function fetchLessonData(lessonId: string) {
 }
 
 export async function fetchOutcomes() {
-  await connection()
-  const outcomes = await db.getOutcomes();
+  await connection();
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const outcomes = await db.getOutcomes(userId);
   return Promise.all(
     outcomes.map(async (o) => {
       const lesson = await db.getLessonById(o.lessonId);
@@ -46,9 +50,11 @@ export async function createOutcome(data: {
   score: number;
   totalQuestions: number;
 }) {
-  // Hardcoded user for now
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
   return await db.saveOutcome({
-    userId: "u1",
+    userId,
     lessonId: data.lessonId,
     lessonTitle: data.lessonTitle,
     score: data.score,
