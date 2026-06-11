@@ -62,3 +62,57 @@ export async function createOutcome(data: {
     aiSummary: null,
   });
 }
+
+async function verifyAdmin() {
+  const { userId, has } = await auth();
+  if (!userId || !has({ role: 'org:admin' })) throw new Error("Unauthorized");
+}
+
+export async function createCourse(data: { title: string; description: string }) {
+  await verifyAdmin();
+  const id = `c_${Math.random().toString(36).substring(7)}`;
+  await db.createCourse(id, data.title, data.description);
+  return id;
+}
+
+export async function deleteCourse(id: string) {
+  await verifyAdmin();
+  await db.deleteCourse(id);
+}
+
+export async function createLesson(courseId: string, data: { title: string; material: string }) {
+  await verifyAdmin();
+  const id = `l_${Math.random().toString(36).substring(7)}`;
+  await db.createLesson(id, courseId, data.title, data.material);
+  return id;
+}
+
+export async function deleteLesson(id: string) {
+  await verifyAdmin();
+  await db.deleteLesson(id);
+}
+
+export async function createQuestion(lessonId: string, data: { text: string; answer1: string; answer2: string; answer3: string; answer4: string; correctAnswer: string }) {
+  await verifyAdmin();
+  const qId = `q_${Math.random().toString(36).substring(7)}`;
+  const answers = [];
+  const answersList = [data.answer1, data.answer2, data.answer3, data.answer4];
+  for (let i = 0; i < 4; i++) {
+    const ansText = answersList[i];
+    const isCorrect = data.correctAnswer === `answer${i + 1}`;
+    if (ansText) {
+      answers.push({
+        aId: `a_${Math.random().toString(36).substring(7)}`,
+        text: ansText,
+        isCorrect
+      });
+    }
+  }
+  await db.createQuestionWithAnswers(qId, lessonId, data.text, answers);
+  return qId;
+}
+
+export async function deleteQuestion(id: string) {
+  await verifyAdmin();
+  await db.deleteQuestion(id);
+}

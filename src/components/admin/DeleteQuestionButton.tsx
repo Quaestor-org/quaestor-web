@@ -2,11 +2,12 @@
 
 import { useDeleteQuestionMutation } from "@/app/admin/mutations";
 
-export function DeleteQuestionButton({ id, courseId, lessonId }: { id: string; courseId: string; lessonId: string }) {
-  const mutation = useDeleteQuestionMutation(courseId, lessonId);
+export function DeleteQuestionButton({ id }: { id: string }) {
+  const mutation = useDeleteQuestionMutation();
 
   return (
     <button
+      type="button"
       onClick={() => {
         if (confirm("Are you sure you want to delete this question?")) {
           mutation.mutate(id);

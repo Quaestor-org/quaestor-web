@@ -46,18 +46,18 @@ export function useDeleteCourseMutation() {
   });
 }
 
-export function useDeleteLessonMutation(courseId: string) {
+export function useDeleteLessonMutation() {
   return useMutation({
     mutationFn: async (id: string) => {
-      return await deleteLessonAction(id, courseId);
+      return await deleteLessonAction(id);
     },
   });
 }
 
-export function useDeleteQuestionMutation(courseId: string, lessonId: string) {
+export function useDeleteQuestionMutation() {
   return useMutation({
     mutationFn: async (questionId: string) => {
-      return await deleteQuestionAction(questionId, courseId, lessonId);
+      return await deleteQuestionAction(questionId);
     },
   });
 }

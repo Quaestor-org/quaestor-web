@@ -2,8 +2,8 @@
 
 import { useDeleteLessonMutation } from "@/app/admin/mutations";
 
-export function DeleteLessonButton({ id, courseId }: { id: string; courseId: string }) {
-  const mutation = useDeleteLessonMutation(courseId);
+export function DeleteLessonButton({ id }: { id: string; courseId?: string }) {
+  const mutation = useDeleteLessonMutation();
 
   return (
     <button
