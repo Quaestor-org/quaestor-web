@@ -12,9 +12,8 @@ export const LessonSchema = z.object({
   id: z.string(),
   courseId: z.string(),
   title: z.string().min(1, "Title is required"),
-  material: z
-    .array(z.string())
-    .min(1, "At least one paragraph of material is required"),
+
+  material: z.string().min(1, "Material is required"),
 });
 
 export const AnswerSchema = z.object({
@@ -56,7 +55,6 @@ export type AddLessonInput = z.infer<typeof AddLessonSchema>;
 
 export const AddAnswerSchema = AnswerSchema.omit({ id: true });
 export type AddAnswerInput = z.infer<typeof AddAnswerSchema>;
-
 
 export const AddQuestionSchema = z.object({
   text: z.string().min(1, "Question text is required"),

@@ -1,18 +1,15 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { AddLessonDialog } from "@/components/admin/AddLessonDialog";
-import { DeleteLessonButton } from "@/components/admin/DeleteLessonButton";
+import CourseDescription from "@/components/admin/course-description";
+import CourseTitleHeader from "@/components/admin/course-title-header";
+import LessonsDisplay from "@/components/lessons-display";
 import { fetchCourseData } from "@/lib/dal";
 
-export default async function AdminLessonPage(props: {
-  params: Promise<{ id: string }>;
-}) {
-  const params = await props.params;
-  const { course, lessons } = await fetchCourseData(params.id);
-
-  if (!course) {
-    notFound();
-  }
+export default async function AdminLessonPage(
+  props: PageProps<"/admin/courses/[id]/lessons/[lessonId]">,
+) {
+  const dataPromise = props.params.then((p) => fetchCourseData(p.id));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -24,12 +21,26 @@ export default async function AdminLessonPage(props: {
           &larr; Back to Dashboard
         </Link>
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
-            {course.title}
-          </h1>
-          <AddLessonDialog courseId={course.id} />
+          <Suspense>
+            <CourseTitleHeader
+              courseTitlePromise={dataPromise.then(
+                (data) => data.course?.title,
+              )}
+            />
+          </Suspense>
+          <Suspense>
+            <AddLessonDialog
+              courseIdPromise={dataPromise.then((data) => data.course?.id)}
+            />
+          </Suspense>
         </div>
-        <p className="text-zinc-500 mt-2">{course.description}</p>
+        <Suspense>
+          <CourseDescription
+            courseDescriptionPromise={dataPromise.then(
+              (data) => data.course?.description,
+            )}
+          />
+        </Suspense>
       </div>
 
       <div className="bg-white rounded-lg border shadow-sm">
@@ -41,37 +52,11 @@ export default async function AdminLessonPage(props: {
                 <th className="px-6 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {lessons.map((lesson) => (
-                <tr
-                  key={lesson.id}
-                  className="border-b last:border-0 hover:bg-zinc-50"
-                >
-                  <td className="px-6 py-4 font-medium text-zinc-900">
-                    {lesson.title}
-                  </td>
-                  <td className="px-6 py-4 text-right space-x-4">
-                    <Link
-                      href={`/admin/courses/${course.id}/lessons/${lesson.id}`}
-                      className="text-blue-600 hover:underline font-medium"
-                    >
-                      Manage Questions
-                    </Link>
-                    <DeleteLessonButton id={lesson.id} courseId={course.id} />
-                  </td>
-                </tr>
-              ))}
-              {lessons.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={2}
-                    className="px-6 py-8 text-center text-zinc-500"
-                  >
-                    No lessons found in this course. Create one to get started.
-                  </td>
-                </tr>
-              )}
-            </tbody>
+            <Suspense>
+              <LessonsDisplay
+                lessonsPromise={dataPromise.then((data) => data.lessons)}
+              />
+            </Suspense>
           </table>
         </div>
       </div>

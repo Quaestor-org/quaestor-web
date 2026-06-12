@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
-import { z } from "zod";
+import { use, useState } from "react";
+import { useCreateLessonMutation } from "@/app/admin/mutations";
 import {
   Dialog,
   DialogContent,
@@ -12,29 +11,40 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useCreateLessonMutation } from "@/app/admin/mutations";
+import { AddLessonSchema } from "@/lib/schemas";
 
-export function AddLessonDialog({ courseId }: { courseId: string }) {
+export function AddLessonDialog({
+  courseIdPromise,
+}: {
+  courseIdPromise: Promise<string | undefined>;
+}) {
+  const courseId = use(courseIdPromise);
   const [open, setOpen] = useState(false);
-  const mutation = useCreateLessonMutation(courseId);
+  const mutation = useCreateLessonMutation(courseId || "");
 
   const form = useForm({
     defaultValues: {
       title: "",
       material: "",
     },
-    validatorAdapter: zodValidator(),
     onSubmit: async ({ value }) => {
       await mutation.mutateAsync(value);
       setOpen(false);
       form.reset();
     },
+    validators: {
+      onBlur: AddLessonSchema,
+      onSubmit: AddLessonSchema,
+    },
   });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium">
+      <DialogTrigger>
+        <button
+          type="button"
+          className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium"
+        >
           Add Lesson
         </button>
       </DialogTrigger>
@@ -53,15 +63,13 @@ export function AddLessonDialog({ courseId }: { courseId: string }) {
           }}
           className="space-y-6 pt-4"
         >
-          <form.Field
-            name="title"
-            validators={{
-              onChange: z.string().min(3, "Title must be at least 3 characters"),
-            }}
-          >
+          <form.Field name="title">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium text-zinc-900">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-medium text-zinc-900"
+                >
                   Lesson Title
                 </label>
                 <input
@@ -73,25 +81,27 @@ export function AddLessonDialog({ courseId }: { courseId: string }) {
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-900"
                   placeholder="e.g. Components and Props"
                 />
-                {field.state.meta.errors ? (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors && field.state.meta.isTouched ? (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors[0]?.message}
+                  </p>
                 ) : null}
               </div>
             )}
           </form.Field>
 
-          <form.Field
-            name="material"
-            validators={{
-              onChange: z.string().min(10, "Material must be at least 10 characters"),
-            }}
-          >
+          <form.Field name="material">
             {(field) => (
               <div className="space-y-2">
-                <label htmlFor={field.name} className="text-sm font-medium text-zinc-900">
+                <label
+                  htmlFor={field.name}
+                  className="text-sm font-medium text-zinc-900"
+                >
                   Lesson Material (Paragraphs)
                 </label>
-                <p className="text-xs text-zinc-500">Separate paragraphs with a new line.</p>
+                <p className="text-xs text-zinc-500">
+                  Separate paragraphs with a new line.
+                </p>
                 <textarea
                   id={field.name}
                   name={field.name}
@@ -102,8 +112,10 @@ export function AddLessonDialog({ courseId }: { courseId: string }) {
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-900 resize-none font-mono text-sm"
                   placeholder="First paragraph...&#10;&#10;Second paragraph..."
                 />
-                {field.state.meta.errors ? (
-                  <p className="text-xs text-red-500">{field.state.meta.errors}</p>
+                {field.state.meta.errors && field.state.meta.isTouched ? (
+                  <p className="text-xs text-red-500">
+                    {field.state.meta.errors[0]?.message}
+                  </p>
                 ) : null}
               </div>
             )}
