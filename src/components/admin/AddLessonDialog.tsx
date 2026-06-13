@@ -2,7 +2,6 @@
 
 import { useForm } from "@tanstack/react-form";
 import { use, useState } from "react";
-import { useCreateLessonMutation } from "@/app/admin/mutations";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useCreateLessonMutation } from "@/lib/mutations";
 import { AddLessonSchema } from "@/lib/schemas";
 
 export function AddLessonDialog({

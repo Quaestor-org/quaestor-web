@@ -25,7 +25,6 @@ export default function CoursePage(props: PageProps<"/courses/[id]">) {
         <Suspense fallback={<LessonsDisplayFallback />}>
           <LessonsDisplay
             lessonsPromise={dataPromise.then((data) => data.lessons)}
-            courseIdPromise={dataPromise.then((data) => data?.course?.id)}
           />
         </Suspense>
       </div>

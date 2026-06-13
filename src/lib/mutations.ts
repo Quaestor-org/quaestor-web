@@ -1,9 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCourseAction, createLessonAction, createQuestionAction, deleteCourseAction, deleteLessonAction, deleteQuestionAction } from "./actions";
+import {
+  createCourseAction,
+  createLessonAction,
+  createQuestionAction,
+  deleteCourseAction,
+  deleteLessonAction,
+  deleteQuestionAction,
+} from "./actions/admin-actions";
 
 export function useCreateCourseMutation() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (data: { title: string; description: string }) => {
       return await createCourseAction(data);

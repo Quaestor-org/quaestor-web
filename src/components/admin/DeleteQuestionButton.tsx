@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteQuestionMutation } from "@/app/admin/mutations";
+import { useDeleteQuestionMutation } from "@/lib/mutations";
 
 export function DeleteQuestionButton({ id }: { id: string }) {
   const mutation = useDeleteQuestionMutation();

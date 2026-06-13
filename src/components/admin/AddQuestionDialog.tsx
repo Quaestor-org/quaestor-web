@@ -2,7 +2,6 @@
 
 import { useForm } from "@tanstack/react-form";
 import { use, useState } from "react";
-import { useCreateQuestionMutation } from "@/app/admin/mutations";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useCreateQuestionMutation } from "@/lib/mutations";
 import { AddQuestionSchema } from "@/lib/schemas";
 
 export function AddQuestionDialog({
@@ -86,9 +86,10 @@ export function AddQuestionDialog({
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-900"
                   placeholder="e.g. What is a component?"
                 />
-                {field.state.meta.isTouched && field.state.meta.errors.length ? (
+                {field.state.meta.isTouched &&
+                field.state.meta.errors.length ? (
                   <p className="text-xs text-red-500">
-                    {field.state.meta.errors.map((err) => err?.message ?? err).join(", ")}
+                    {field.state.meta.errors[0]?.message}
                   </p>
                 ) : null}
               </div>
@@ -133,9 +134,10 @@ export function AddQuestionDialog({
                                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-900"
                                   placeholder={`Answer ${index + 1}`}
                                 />
-                                {field.state.meta.isTouched && field.state.meta.errors.length ? (
+                                {field.state.meta.isTouched &&
+                                field.state.meta.errors.length ? (
                                   <p className="text-xs text-red-500 mt-1">
-                                    {field.state.meta.errors.map((err) => err?.message ?? err).join(", ")}
+                                    {field.state.meta.errors[0]?.message}
                                   </p>
                                 ) : null}
                               </div>

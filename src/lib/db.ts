@@ -1,9 +1,11 @@
 import { Pool } from "@neondatabase/serverless";
+import { connection } from "next/server";
 import type { Course, Lesson, Question, UserOutcome } from "./types";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function getCourses(): Promise<Course[]> {
+  await connection();
   const { rows } = await pool.query("SELECT * FROM courses");
   return rows as Course[];
 }
@@ -59,7 +61,7 @@ export async function getQuestionsByLesson(
 export async function getOutcomes(userId: string): Promise<UserOutcome[]> {
   const { rows } = await pool.query(
     'SELECT id, user_id as "userId", lesson_id as "lessonId", score, total_questions as "totalQuestions", ai_summary as "aiSummary", created_at as "createdAt" FROM user_outcomes WHERE user_id = $1 ORDER BY created_at DESC',
-    [userId]
+    [userId],
   );
   return rows.map((r) => ({
     ...r,
@@ -113,31 +115,57 @@ export async function updateOutcomeSummary(
   } as UserOutcome;
 }
 
-export async function createCourse(id: string, title: string, description: string) {
-  await pool.query('INSERT INTO courses (id, title, description) VALUES ($1, $2, $3)', [id, title, description]);
+export async function createCourse(
+  id: string,
+  title: string,
+  description: string,
+) {
+  await pool.query(
+    "INSERT INTO courses (id, title, description) VALUES ($1, $2, $3)",
+    [id, title, description],
+  );
 }
 
 export async function deleteCourse(id: string) {
-  await pool.query('DELETE FROM courses WHERE id = $1', [id]);
+  await pool.query("DELETE FROM courses WHERE id = $1", [id]);
 }
 
-export async function createLesson(id: string, courseId: string, title: string, material: string) {
-  const paragraphs = material.split('\n').filter(p => p.trim() !== '');
-  await pool.query('INSERT INTO lessons (id, course_id, title, material) VALUES ($1, $2, $3, $4)', [id, courseId, title, JSON.stringify(paragraphs)]);
+export async function createLesson(
+  id: string,
+  courseId: string,
+  title: string,
+  material: string,
+) {
+  const paragraphs = material.split("\n").filter((p) => p.trim() !== "");
+  await pool.query(
+    "INSERT INTO lessons (id, course_id, title, material) VALUES ($1, $2, $3, $4)",
+    [id, courseId, title, JSON.stringify(paragraphs)],
+  );
 }
 
 export async function deleteLesson(id: string) {
-  await pool.query('DELETE FROM lessons WHERE id = $1', [id]);
+  await pool.query("DELETE FROM lessons WHERE id = $1", [id]);
 }
 
-export async function createQuestionWithAnswers(qId: string, lessonId: string, text: string, answers: {text: string, isCorrect: boolean, aId: string}[]) {
-  await pool.query('INSERT INTO questions (id, lesson_id, text) VALUES ($1, $2, $3)', [qId, lessonId, text]);
-  
+export async function createQuestionWithAnswers(
+  qId: string,
+  lessonId: string,
+  text: string,
+  answers: { text: string; isCorrect: boolean; aId: string }[],
+) {
+  await pool.query(
+    "INSERT INTO questions (id, lesson_id, text) VALUES ($1, $2, $3)",
+    [qId, lessonId, text],
+  );
+
   for (const ans of answers) {
-    await pool.query('INSERT INTO answers (id, question_id, text, is_correct) VALUES ($1, $2, $3, $4)', [ans.aId, qId, ans.text, ans.isCorrect]);
+    await pool.query(
+      "INSERT INTO answers (id, question_id, text, is_correct) VALUES ($1, $2, $3, $4)",
+      [ans.aId, qId, ans.text, ans.isCorrect],
+    );
   }
 }
 
 export async function deleteQuestion(id: string) {
-  await pool.query('DELETE FROM questions WHERE id = $1', [id]);
+  await pool.query("DELETE FROM questions WHERE id = $1", [id]);
 }

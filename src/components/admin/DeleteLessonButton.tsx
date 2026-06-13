@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeleteLessonMutation } from "@/app/admin/mutations";
+import { useDeleteLessonMutation } from "@/lib/mutations";
 
 export function DeleteLessonButton({ id }: { id: string; courseId?: string }) {
   const mutation = useDeleteLessonMutation();

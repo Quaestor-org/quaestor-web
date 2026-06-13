@@ -4,7 +4,7 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { use } from "react";
-import { submitQuizAction } from "@/app/actions";
+import { submitQuizAction } from "@/lib/actions/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
