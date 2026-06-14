@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 export function NavBar() {
   return (

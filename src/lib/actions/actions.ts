@@ -1,18 +1,22 @@
-'use server';
+"use server";
 
-import { createOutcome, fetchLessonData } from '@/lib/dal';
-import { updateOutcomeSummary } from '@/lib/db';
+import { createOutcome, fetchLessonData } from "@/lib/dal";
+import { updateOutcomeSummary } from "@/lib/db";
 
-export async function submitQuizAction(data: { lessonId: string, lessonTitle:string, answers: Record<string, string> }) {
+export async function submitQuizAction(data: {
+  lessonId: string;
+  lessonTitle: string;
+  answers: Record<string, string>;
+}) {
   const { lesson, questions } = await fetchLessonData(data.lessonId);
   if (!lesson) {
-    throw new Error('Lesson not found');
+    throw new Error("Lesson not found");
   }
 
   let score = 0;
-  questions.forEach(q => {
+  questions.forEach((q) => {
     const selectedAnswerId = data.answers[q.id];
-    const correctAnswer = q.answers.find(a => a.isCorrect);
+    const correctAnswer = q.answers.find((a) => a.isCorrect);
     if (correctAnswer && correctAnswer.id === selectedAnswerId) {
       score += 1;
     }
@@ -20,7 +24,7 @@ export async function submitQuizAction(data: { lessonId: string, lessonTitle:str
 
   const outcome = await createOutcome({
     lessonId: data.lessonId,
-    lessonTitle:data.lessonTitle,
+    lessonTitle: data.lessonTitle,
     score,
     totalQuestions: questions.length,
   });
@@ -32,5 +36,10 @@ export async function submitQuizAction(data: { lessonId: string, lessonTitle:str
     await updateOutcomeSummary(outcome.id, aiSummary);
   }, 2000);
 
-  return { success: true, outcomeId: outcome.id, score, totalQuestions: questions.length };
+  return {
+    success: true,
+    outcomeId: outcome.id,
+    score,
+    totalQuestions: questions.length,
+  };
 }

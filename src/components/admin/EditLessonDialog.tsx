@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { use, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,27 +10,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useCreateLessonMutation } from "@/lib/mutations";
+import { useUpdateLessonMutation } from "@/lib/mutations";
 import { AddLessonSchema } from "@/lib/schemas";
+import type { Lesson } from "@/lib/types";
 
-export function AddLessonDialog({
-  courseIdPromise,
-}: {
-  courseIdPromise: Promise<string | undefined>;
-}) {
-  const courseId = use(courseIdPromise);
+export function EditLessonDialog({ lesson }: { lesson: Lesson }) {
   const [open, setOpen] = useState(false);
-  const mutation = useCreateLessonMutation(courseId || "");
+  const mutation = useUpdateLessonMutation();
 
   const form = useForm({
     defaultValues: {
-      title: "",
-      material: "",
+      title: lesson.title,
+      material: lesson.material.join("\n\n"),
     },
     onSubmit: async ({ value }) => {
-      await mutation.mutateAsync(value);
+      await mutation.mutateAsync({ id: lesson.id, data: value });
       setOpen(false);
-      form.reset();
     },
     validators: {
       onBlur: AddLessonSchema,
@@ -44,17 +39,17 @@ export function AddLessonDialog({
         render={
           <button
             type="button"
-            className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium"
+            className="text-blue-600 hover:underline font-medium"
           />
         }
       >
-        Add Lesson
+        Edit
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Lesson</DialogTitle>
+          <DialogTitle>Edit Lesson</DialogTitle>
           <DialogDescription>
-            Add a new lesson to this course.
+            Update the details for this lesson.
           </DialogDescription>
         </DialogHeader>
         <form
@@ -129,7 +124,7 @@ export function AddLessonDialog({
               disabled={mutation.isPending}
               className="bg-zinc-900 text-white px-6 py-2 rounded-md hover:bg-zinc-800 transition-colors font-medium disabled:opacity-50"
             >
-              {mutation.isPending ? "Creating..." : "Create Lesson"}
+              {mutation.isPending ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

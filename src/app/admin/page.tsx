@@ -26,7 +26,6 @@ export default async function AdminCourses() {
               </tr>
             </thead>
             <Suspense>
-              {" "}
               <CourseDisplay coursesPromise={coursesPromise} />
             </Suspense>
           </table>

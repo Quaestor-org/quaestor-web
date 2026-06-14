@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Suspense } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
-import Link from "next/link";
+import { Suspense } from "react";
 import { NavBar } from "@/components/navbar";
 import { Providers } from "@/components/Providers";
 

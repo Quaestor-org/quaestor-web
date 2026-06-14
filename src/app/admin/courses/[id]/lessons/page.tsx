@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { AddLessonDialog } from "@/components/admin/AddLessonDialog";
 import CourseDescription from "@/components/admin/course-description";
 import CourseTitleHeader from "@/components/admin/course-title-header";
-import LessonsDisplay from "@/components/lessons-display";
+import LessonsTableBody from "@/components/admin/lessons-table-body";
 import { fetchCourseData } from "@/lib/dal";
 
 export default async function AdminLessonPage(
@@ -53,7 +53,7 @@ export default async function AdminLessonPage(
               </tr>
             </thead>
             <Suspense>
-              <LessonsDisplay
+              <LessonsTableBody
                 lessonsPromise={dataPromise.then((data) => data.lessons)}
               />
             </Suspense>

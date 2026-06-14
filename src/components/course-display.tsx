@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Course } from "@/lib/types";
 import { DeleteCourseButton } from "./admin/DeleteCourseButton";
+import { EditCourseDialog } from "./admin/EditCourseDialog";
 
 export default async function CoursesDisplay({
   coursesPromise,
@@ -25,6 +26,7 @@ export default async function CoursesDisplay({
             >
               Manage Lessons
             </Link>
+            <EditCourseDialog course={course} />
             <DeleteCourseButton id={course.id} />
           </td>
         </tr>

@@ -65,10 +65,13 @@ export async function createOutcome(data: {
 
 async function verifyAdmin() {
   const { userId, has } = await auth();
-  if (!userId || !has({ role: 'org:admin' })) throw new Error("Unauthorized");
+  if (!userId || !has({ role: "org:admin" })) throw new Error("Unauthorized");
 }
 
-export async function createCourse(data: { title: string; description: string }) {
+export async function createCourse(data: {
+  title: string;
+  description: string;
+}) {
   await verifyAdmin();
   const id = `c_${Math.random().toString(36).substring(7)}`;
   await db.createCourse(id, data.title, data.description);
@@ -80,7 +83,10 @@ export async function deleteCourse(id: string) {
   await db.deleteCourse(id);
 }
 
-export async function createLesson(courseId: string, data: { title: string; material: string }) {
+export async function createLesson(
+  courseId: string,
+  data: { title: string; material: string },
+) {
   await verifyAdmin();
   const id = `l_${Math.random().toString(36).substring(7)}`;
   await db.createLesson(id, courseId, data.title, data.material);
@@ -92,7 +98,17 @@ export async function deleteLesson(id: string) {
   await db.deleteLesson(id);
 }
 
-export async function createQuestion(lessonId: string, data: { text: string; answer1: string; answer2: string; answer3: string; answer4: string; correctAnswer: string }) {
+export async function createQuestion(
+  lessonId: string,
+  data: {
+    text: string;
+    answer1: string;
+    answer2: string;
+    answer3: string;
+    answer4: string;
+    correctAnswer: string;
+  },
+) {
   await verifyAdmin();
   const qId = `q_${Math.random().toString(36).substring(7)}`;
   const answers = [];
@@ -104,7 +120,7 @@ export async function createQuestion(lessonId: string, data: { text: string; ans
       answers.push({
         aId: `a_${Math.random().toString(36).substring(7)}`,
         text: ansText,
-        isCorrect
+        isCorrect,
       });
     }
   }
@@ -115,4 +131,48 @@ export async function createQuestion(lessonId: string, data: { text: string; ans
 export async function deleteQuestion(id: string) {
   await verifyAdmin();
   await db.deleteQuestion(id);
+}
+
+export async function updateCourse(
+  id: string,
+  data: { title: string; description: string },
+) {
+  await verifyAdmin();
+  await db.updateCourse(id, data.title, data.description);
+}
+
+export async function updateLesson(
+  id: string,
+  data: { title: string; material: string },
+) {
+  await verifyAdmin();
+  await db.updateLesson(id, data.title, data.material);
+}
+
+export async function updateQuestion(
+  id: string,
+  data: {
+    text: string;
+    answer1: string;
+    answer2: string;
+    answer3: string;
+    answer4: string;
+    correctAnswer: string;
+  },
+) {
+  await verifyAdmin();
+  const answers = [];
+  const answersList = [data.answer1, data.answer2, data.answer3, data.answer4];
+  for (let i = 0; i < 4; i++) {
+    const ansText = answersList[i];
+    const isCorrect = data.correctAnswer === `answer${i + 1}`;
+    if (ansText) {
+      answers.push({
+        aId: `a_${Math.random().toString(36).substring(7)}`,
+        text: ansText,
+        isCorrect,
+      });
+    }
+  }
+  await db.updateQuestionWithAnswers(id, data.text, answers);
 }

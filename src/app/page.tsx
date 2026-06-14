@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -8,13 +8,27 @@ export default function Home() {
         Welcome to LearnerPro
       </h1>
       <p className="text-lg md:text-xl text-zinc-600 max-w-2xl">
-        The simplest way to learn new skills. Start exploring our courses and take quizzes to test your knowledge.
+        The simplest way to learn new skills. Start exploring our courses and
+        take quizzes to test your knowledge.
       </p>
       <div className="flex gap-4">
-        <Link href="/courses" className={buttonVariants({ size: 'lg', className: 'rounded-full px-8' })}>
+        <Link
+          href="/courses"
+          className={buttonVariants({
+            size: "lg",
+            className: "rounded-full px-8",
+          })}
+        >
           Browse Courses
         </Link>
-        <Link href="/outcomes" className={buttonVariants({ variant: 'outline', size: 'lg', className: 'rounded-full px-8' })}>
+        <Link
+          href="/outcomes"
+          className={buttonVariants({
+            variant: "outline",
+            size: "lg",
+            className: "rounded-full px-8",
+          })}
+        >
           View Outcomes
         </Link>
       </div>

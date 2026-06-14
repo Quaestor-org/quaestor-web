@@ -33,13 +33,15 @@ export function AddCourseDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <button
-          type="button"
-          className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium"
-        >
-          Add Course
-        </button>
+      <DialogTrigger
+        render={
+          <button
+            type="button"
+            className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium"
+          />
+        }
+      >
+        Add Course
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -6,10 +6,13 @@ import {
   deleteCourseAction,
   deleteLessonAction,
   deleteQuestionAction,
+  updateCourseAction,
+  updateLessonAction,
+  updateQuestionAction,
 } from "./actions/admin-actions";
 
 export function useCreateCourseMutation() {
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: { title: string; description: string }) => {
@@ -65,6 +68,55 @@ export function useDeleteQuestionMutation() {
   return useMutation({
     mutationFn: async (questionId: string) => {
       return await deleteQuestionAction(questionId);
+    },
+  });
+}
+
+export function useUpdateCourseMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { title: string; description: string };
+    }) => {
+      return await updateCourseAction(id, data);
+    },
+  });
+}
+
+export function useUpdateLessonMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { title: string; material: string };
+    }) => {
+      return await updateLessonAction(id, data);
+    },
+  });
+}
+
+export function useUpdateQuestionMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: {
+        text: string;
+        answer1: string;
+        answer2: string;
+        answer3: string;
+        answer4: string;
+        correctAnswer: string;
+      };
+    }) => {
+      return await updateQuestionAction(id, data);
     },
   });
 }

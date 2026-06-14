@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { use, useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,32 +10,39 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useCreateQuestionMutation } from "@/lib/mutations";
+import { useUpdateQuestionMutation } from "@/lib/mutations";
 import { AddQuestionSchema } from "@/lib/schemas";
+import type { Question } from "@/lib/types";
 
-export function AddQuestionDialog({
-  lessonIdPromise,
-}: {
-  lessonIdPromise: Promise<string | undefined>;
-}) {
-  const lessonId = use(lessonIdPromise);
+export function EditQuestionDialog({ question }: { question: Question }) {
   const [open, setOpen] = useState(false);
-  const mutation = useCreateQuestionMutation(lessonId || "");
+  const mutation = useUpdateQuestionMutation();
+
+  const initialCorrectAnswer = (() => {
+    const idx = question.answers.findIndex((a) => a.isCorrect);
+    if (idx === 0) return "answer1";
+    if (idx === 1) return "answer2";
+    if (idx === 2) return "answer3";
+    return "answer4";
+  })();
 
   const form = useForm({
     defaultValues: {
-      text: "",
-      answer1: "",
-      answer2: "",
-      answer3: "",
-      answer4: "",
-      correctAnswer: "answer1" as "answer1" | "answer2" | "answer3" | "answer4",
-      lessonId: lessonId || "",
+      text: question.text,
+      answer1: question.answers[0]?.text || "",
+      answer2: question.answers[1]?.text || "",
+      answer3: question.answers[2]?.text || "",
+      answer4: question.answers[3]?.text || "",
+      correctAnswer: initialCorrectAnswer as
+        | "answer1"
+        | "answer2"
+        | "answer3"
+        | "answer4",
+      lessonId: question.lessonId,
     },
     onSubmit: async ({ value }) => {
-      await mutation.mutateAsync(value);
+      await mutation.mutateAsync({ id: question.id, data: value });
       setOpen(false);
-      form.reset();
     },
     validators: {
       onBlur: AddQuestionSchema,
@@ -49,17 +56,17 @@ export function AddQuestionDialog({
         render={
           <button
             type="button"
-            className="bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-medium"
+            className="text-blue-600 hover:underline font-medium"
           />
         }
       >
-        Add Question
+        Edit
       </DialogTrigger>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle>Create New Question</DialogTitle>
+          <DialogTitle>Edit Question</DialogTitle>
           <DialogDescription>
-            Add a question and up to 4 answers.
+            Update the question and answers details.
           </DialogDescription>
         </DialogHeader>
         <form
@@ -160,7 +167,7 @@ export function AddQuestionDialog({
               disabled={mutation.isPending}
               className="bg-zinc-900 text-white px-6 py-2 rounded-md hover:bg-zinc-800 transition-colors font-medium disabled:opacity-50"
             >
-              {mutation.isPending ? "Creating..." : "Create Question"}
+              {mutation.isPending ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

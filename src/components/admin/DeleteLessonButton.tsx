@@ -7,6 +7,7 @@ export function DeleteLessonButton({ id }: { id: string; courseId?: string }) {
 
   return (
     <button
+      type="button"
       onClick={() => {
         if (confirm("Are you sure you want to delete this lesson?")) {
           mutation.mutate(id);

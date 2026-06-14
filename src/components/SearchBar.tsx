@@ -2,13 +2,13 @@
 
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 
 export function SearchBar() {
-  const router = useRouter();
+  const _router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, _startTransition] = useTransition();
   const [query, setQuery] = useState(searchParams.get("q") || "");
 
   // useEffect(() => {

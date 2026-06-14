@@ -169,3 +169,43 @@ export async function createQuestionWithAnswers(
 export async function deleteQuestion(id: string) {
   await pool.query("DELETE FROM questions WHERE id = $1", [id]);
 }
+
+export async function updateCourse(
+  id: string,
+  title: string,
+  description: string,
+) {
+  await pool.query(
+    "UPDATE courses SET title = $1, description = $2 WHERE id = $3",
+    [title, description, id],
+  );
+}
+
+export async function updateLesson(
+  id: string,
+  title: string,
+  material: string,
+) {
+  const paragraphs = material.split("\n").filter((p) => p.trim() !== "");
+  await pool.query(
+    "UPDATE lessons SET title = $1, material = $2 WHERE id = $3",
+    [title, JSON.stringify(paragraphs), id],
+  );
+}
+
+export async function updateQuestionWithAnswers(
+  qId: string,
+  text: string,
+  answers: { text: string; isCorrect: boolean; aId: string }[],
+) {
+  await pool.query("UPDATE questions SET text = $1 WHERE id = $2", [text, qId]);
+
+  await pool.query("DELETE FROM answers WHERE question_id = $1", [qId]);
+
+  for (const ans of answers) {
+    await pool.query(
+      "INSERT INTO answers (id, question_id, text, is_correct) VALUES ($1, $2, $3, $4)",
+      [ans.aId, qId, ans.text, ans.isCorrect],
+    );
+  }
+}

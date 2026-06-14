@@ -1,5 +1,6 @@
 import type { Question } from "@/lib/types";
 import { DeleteQuestionButton } from "./DeleteQuestionButton";
+import { EditQuestionDialog } from "./EditQuestionDialog";
 
 export default async function QuestionsDisplay({
   questionsPromise,
@@ -18,6 +19,7 @@ export default async function QuestionsDisplay({
             {question.text}
           </td>
           <td className="px-6 py-4 text-right space-x-4">
+            <EditQuestionDialog question={question} />
             <DeleteQuestionButton id={question.id} />
           </td>
         </tr>
