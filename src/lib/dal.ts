@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { connection } from "next/server";
 import * as db from "./db";
+import { isAdmin } from "./clerk";
 
 export async function fetchCourses(query?: string) {
   let courses = await db.getCourses();
@@ -64,8 +65,9 @@ export async function createOutcome(data: {
 }
 
 async function verifyAdmin() {
-  const { userId, has } = await auth();
-  if (!userId || !has({ role: "org:admin" })) throw new Error("Unauthorized");
+  const { userId } = await auth.protect();
+
+  if (!userId || isAdmin(userId)) throw new Error("Unauthorized");
 }
 
 export async function createCourse(data: {
