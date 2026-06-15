@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { connection } from "next/server";
-import * as db from "./db";
 import { isAdmin } from "./clerk";
+import * as db from "./db";
 
 export async function fetchCourses(query?: string) {
   let courses = await db.getCourses();

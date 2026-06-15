@@ -34,7 +34,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-white text-zinc-950">
         <ClerkProvider>
           <Providers>
-            <Suspense fallback={<div className="h-[61px] border-b" />}>
+            <Suspense fallback={<div className="h-15.25 border-b" />}>
               <NavBar />
             </Suspense>
             <main className="flex-1 max-w-5xl mx-auto w-full p-6 sm:p-10">

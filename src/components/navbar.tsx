@@ -1,9 +1,32 @@
 "use client";
 
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import Link from "next/link";
+import { isAdminClient } from "@/lib/clerk-client";
 
 export function NavBar() {
+  const { user, isLoaded } = useUser();
+
+  if (!isLoaded) {
+    return (
+      <header className="border-b px-6 py-4 flex items-center justify-between">
+        <Link href="/" className="font-bold text-xl tracking-tight">
+          Quaestor
+        </Link>
+        <div className="h-8 w-20 bg-zinc-100 animate-pulse rounded" />{" "}
+        {/* Simple skeleton */}
+      </header>
+    );
+  }
+  console.log(user?.id, isLoaded, isAdminClient(user?.id || ""));
+  const isAdminValue = isLoaded && isAdminClient(user?.id || "");
+
   return (
     <header className="border-b px-6 py-4 flex items-center justify-between">
       <Link href="/" className="font-bold text-xl tracking-tight">
@@ -19,12 +42,14 @@ export function NavBar() {
         >
           Outcomes
         </Link>
-        <Link
-          href="/admin"
-          className="hover:text-zinc-900 transition-colors font-semibold"
-        >
-          Admin
-        </Link>
+        {isAdminValue && (
+          <Link
+            href="/admin"
+            className="hover:text-zinc-900 transition-colors font-semibold"
+          >
+            Admin
+          </Link>
+        )}
         <Show when="signed-out">
           <SignInButton mode="modal">
             <button

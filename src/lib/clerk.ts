@@ -1,3 +1,3 @@
 export function isAdmin(id: string) { 
-  return (process.env.ADMIN_IDS?.split(",") ?? []).includes(id);
+  return (process.env.NEXT_PUBLIC_ADMIN_IDS?.split(",") ?? []).includes(id);
 }
