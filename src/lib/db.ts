@@ -7,7 +7,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function getCourses(): Promise<Course[]> {
   "use cache";
-  cacheTag("courses"); 
+  cacheTag("courses");
   const { rows } = await pool.query("SELECT * FROM courses");
   return rows as Course[];
 }

@@ -44,7 +44,9 @@ export async function fetchCourseData(
 
 export async function fetchLessonData(
   lessonId: string,
-): Promise<Result<{ lesson: Lesson | undefined; questions: Question[] }, Error>> {
+): Promise<
+  Result<{ lesson: Lesson | undefined; questions: Question[] }, Error>
+> {
   try {
     const { userId } = await auth();
     if (!userId) return err(new Error("Unauthorized"));
@@ -186,7 +188,12 @@ export async function createQuestion(
     await verifyAdmin();
     const qId = `q_${Math.random().toString(36).substring(7)}`;
     const answers = [];
-    const answersList = [data.answer1, data.answer2, data.answer3, data.answer4];
+    const answersList = [
+      data.answer1,
+      data.answer2,
+      data.answer3,
+      data.answer4,
+    ];
     for (let i = 0; i < 4; i++) {
       const ansText = answersList[i];
       const isCorrect = data.correctAnswer === `answer${i + 1}`;
@@ -255,7 +262,12 @@ export async function updateQuestion(
   try {
     await verifyAdmin();
     const answers = [];
-    const answersList = [data.answer1, data.answer2, data.answer3, data.answer4];
+    const answersList = [
+      data.answer1,
+      data.answer2,
+      data.answer3,
+      data.answer4,
+    ];
     for (let i = 0; i < 4; i++) {
       const ansText = answersList[i];
       const isCorrect = data.correctAnswer === `answer${i + 1}`;
