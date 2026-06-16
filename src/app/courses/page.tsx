@@ -7,7 +7,7 @@ import { parseParams } from "@/lib/utils";
 
 export default function CoursesPage(props: PageProps<"/courses">) {
   const coursesPromise = props.searchParams.then((p) =>
-    fetchCourses(parseParams(p.q)),
+    fetchCourses(parseParams(p.q)).then((r) => r._unsafeUnwrap()),
   );
 
   return (

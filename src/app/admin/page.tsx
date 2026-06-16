@@ -4,7 +4,7 @@ import CourseDisplay from "@/components/course-display";
 import { fetchCourses } from "@/lib/dal";
 
 export default async function AdminCourses() {
-  const coursesPromise = fetchCourses();
+  const coursesPromise = fetchCourses().then((r) => r._unsafeUnwrap());
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">

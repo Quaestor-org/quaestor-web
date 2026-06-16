@@ -1,16 +1,20 @@
 import { Pool } from "@neondatabase/serverless";
-import { connection } from "next/server";
-import type { Course, Lesson, Question, UserOutcome } from "./types";
+import { cacheTag } from "next/cache";
+
+import type { Answer, Course, Lesson, Question, UserOutcome } from "./types";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function getCourses(): Promise<Course[]> {
-  await connection();
+  "use cache";
+  cacheTag("courses"); 
   const { rows } = await pool.query("SELECT * FROM courses");
   return rows as Course[];
 }
 
 export async function getCourseById(id: string): Promise<Course | undefined> {
+  "use cache";
+  cacheTag("courses", `course-${id}`);
   const { rows } = await pool.query("SELECT * FROM courses WHERE id = $1", [
     id,
   ]);
@@ -18,6 +22,8 @@ export async function getCourseById(id: string): Promise<Course | undefined> {
 }
 
 export async function getLessonsByCourse(courseId: string): Promise<Lesson[]> {
+  "use cache";
+  cacheTag(`lessons-${courseId}`);
   const { rows } = await pool.query(
     'SELECT id, course_id as "courseId", title, material FROM lessons WHERE course_id = $1',
     [courseId],
@@ -26,6 +32,8 @@ export async function getLessonsByCourse(courseId: string): Promise<Lesson[]> {
 }
 
 export async function getLessonById(id: string): Promise<Lesson | undefined> {
+  "use cache";
+  cacheTag(`lesson-${id}`);
   const { rows } = await pool.query(
     'SELECT id, course_id as "courseId", title, material FROM lessons WHERE id = $1',
     [id],
@@ -36,6 +44,8 @@ export async function getLessonById(id: string): Promise<Lesson | undefined> {
 export async function getQuestionsByLesson(
   lessonId: string,
 ): Promise<Question[]> {
+  "use cache";
+  cacheTag(`questions-${lessonId}`);
   const { rows: questions } = await pool.query(
     'SELECT id, lesson_id as "lessonId", text FROM questions WHERE lesson_id = $1',
     [lessonId],
@@ -58,7 +68,30 @@ export async function getQuestionsByLesson(
   })) as Question[];
 }
 
+export async function getQuestionById(
+  id: string,
+): Promise<Question | undefined> {
+  "use cache";
+  cacheTag(`question-${id}`);
+  const { rows } = await pool.query(
+    'SELECT id, lesson_id as "lessonId", text FROM questions WHERE id = $1',
+    [id],
+  );
+  if (rows.length === 0) return undefined;
+  const q = rows[0];
+  const { rows: answers } = await pool.query(
+    'SELECT id, text, is_correct as "isCorrect" FROM answers WHERE question_id = $1',
+    [id],
+  );
+  return {
+    ...q,
+    answers: answers as Answer[],
+  } as Question;
+}
+
 export async function getOutcomes(userId: string): Promise<UserOutcome[]> {
+  "use cache";
+  cacheTag(`outcomes-${userId}`);
   const { rows } = await pool.query(
     'SELECT id, user_id as "userId", lesson_id as "lessonId", score, total_questions as "totalQuestions", ai_summary as "aiSummary", created_at as "createdAt" FROM user_outcomes WHERE user_id = $1 ORDER BY created_at DESC',
     [userId],

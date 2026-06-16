@@ -2,7 +2,7 @@ import { fetchOutcomes } from "@/lib/dal";
 import { OutcomeCard } from "./OutcomeCard";
 
 export default async function OutcomesDisplay() {
-  const outcomes = await fetchOutcomes();
+  const outcomes = (await fetchOutcomes())._unsafeUnwrap();
   const sortedOutcomes = [...outcomes].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );

@@ -13,7 +13,9 @@ export default function LessonPage(
 ) {
   const idPromise = props.params.then((p) => p.id);
   const lessonIdPromise = props.params.then((p) => p.lessonId);
-  const dataPromise = props.params.then((p) => fetchLessonData(p.lessonId));
+  const dataPromise = props.params.then((p) =>
+    fetchLessonData(p.lessonId).then((r) => r._unsafeUnwrap()),
+  );
 
   return (
     <div className="space-y-10 animate-in fade-in duration-500 max-w-3xl mx-auto">

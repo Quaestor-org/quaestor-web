@@ -6,7 +6,9 @@ import LessonsDisplay from "@/components/lessons-display";
 import { fetchCourseData } from "@/lib/dal";
 
 export default function CoursePage(props: PageProps<"/courses/[id]">) {
-  const dataPromise = props.params.then((p) => fetchCourseData(p.id));
+  const dataPromise = props.params.then((p) =>
+    fetchCourseData(p.id).then((r) => r._unsafeUnwrap()),
+  );
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">

@@ -9,7 +9,9 @@ import { fetchCourseData } from "@/lib/dal";
 export default async function AdminLessonPage(
   props: PageProps<"/admin/courses/[id]/lessons/[lessonId]">,
 ) {
-  const dataPromise = props.params.then((p) => fetchCourseData(p.id));
+  const dataPromise = props.params.then((p) =>
+    fetchCourseData(p.id).then((r) => r._unsafeUnwrap()),
+  );
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
