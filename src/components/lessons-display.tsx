@@ -4,15 +4,11 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 export default async function LessonsDisplay({
   lessonsPromise,
-  courseIdPromise,
 }: {
   lessonsPromise: Promise<Lesson[]>;
-  courseIdPromise: Promise<string | undefined>;
 }) {
-  const [lessons, courseId] = await Promise.all([
-    lessonsPromise,
-    courseIdPromise,
-  ]);
+  const lessons = await lessonsPromise;
+
   return lessons.length === 0 ? (
     <p className="text-zinc-500">No lessons available yet.</p>
   ) : (
@@ -20,7 +16,7 @@ export default async function LessonsDisplay({
       {lessons.map((lesson: Lesson, index: number) => (
         <Link
           key={lesson.id}
-          href={`/courses/${courseId}/lessons/${lesson.id}`}
+          href={`/courses/${lesson.courseId}/lessons/${lesson.id}`}
           className="group"
         >
           <Card className="h-full transition-shadow hover:shadow-md border-zinc-200">

@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface OutcomeCardProps {
   id: string;
@@ -39,7 +39,9 @@ export function OutcomeCard({
                 <div className="h-2 w-2 bg-zinc-300 rounded-full"></div>
                 <div className="h-2 w-2 bg-zinc-300 rounded-full"></div>
               </div>
-              <span className="text-sm text-zinc-400">AI is analyzing your results...</span>
+              <span className="text-sm text-zinc-400">
+                AI is analyzing your results...
+              </span>
             </div>
           )}
         </div>

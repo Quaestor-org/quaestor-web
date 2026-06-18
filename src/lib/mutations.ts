@@ -1,0 +1,122 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  createCourseAction,
+  createLessonAction,
+  createQuestionAction,
+  deleteCourseAction,
+  deleteLessonAction,
+  deleteQuestionAction,
+  updateCourseAction,
+  updateLessonAction,
+  updateQuestionAction,
+} from "./actions/admin-actions";
+
+export function useCreateCourseMutation() {
+  const _queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { title: string; description: string }) => {
+      return await createCourseAction(data);
+    },
+    onSuccess: () => {
+      // Could invalidate queries here if we were querying via react-query
+      // but since we rely on Server Components, the revalidatePath in the action does the work.
+    },
+  });
+}
+
+export function useCreateLessonMutation(courseId: string) {
+  return useMutation({
+    mutationFn: async (data: { title: string; material: string }) => {
+      return await createLessonAction(courseId, data);
+    },
+  });
+}
+
+export function useCreateQuestionMutation(lessonId: string) {
+  return useMutation({
+    mutationFn: async (data: {
+      text: string;
+      answer1: string;
+      answer2: string;
+      answer3: string;
+      answer4: string;
+      correctAnswer: string;
+    }) => {
+      return await createQuestionAction(lessonId, data);
+    },
+  });
+}
+
+export function useDeleteCourseMutation() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      return await deleteCourseAction(id);
+    },
+  });
+}
+
+export function useDeleteLessonMutation() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      return await deleteLessonAction(id);
+    },
+  });
+}
+
+export function useDeleteQuestionMutation() {
+  return useMutation({
+    mutationFn: async (questionId: string) => {
+      return await deleteQuestionAction(questionId);
+    },
+  });
+}
+
+export function useUpdateCourseMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { title: string; description: string };
+    }) => {
+      return await updateCourseAction(id, data);
+    },
+  });
+}
+
+export function useUpdateLessonMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { title: string; material: string };
+    }) => {
+      return await updateLessonAction(id, data);
+    },
+  });
+}
+
+export function useUpdateQuestionMutation() {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: {
+        text: string;
+        answer1: string;
+        answer2: string;
+        answer3: string;
+        answer4: string;
+        correctAnswer: string;
+      };
+    }) => {
+      return await updateQuestionAction(id, data);
+    },
+  });
+}
